@@ -388,10 +388,17 @@ def search(*args, **kwargs):
     return query(*args, **kwargs)
 
 
-def metrics(author, metadata=False):
+def metrics(author, database="astronomy", rows=20, metadata=False):
     """ Retrieves metrics for a given author query """
 
-    payload = {"q": author, "dev_key": DEV_KEY}
+    database = "database:" + database
+    author = "author:\"" + author + "\""
+    payload = {
+        "q": author,
+        "rows":rows,
+        "filter":database,
+        "dev_key": DEV_KEY
+        }
     r = requests.get(ADS_HOST + "/search/metrics/", params=payload)
     if not r.ok: r.raise_for_status()
 
